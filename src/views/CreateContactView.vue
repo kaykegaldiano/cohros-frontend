@@ -1,5 +1,24 @@
 <script setup>
 import { reactive, ref } from 'vue';
+import {
+  TransitionRoot,
+  TransitionChild,
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+} from '@headlessui/vue'
+
+const isDialogOpen = ref(false)
+const modalTitle = ref('')
+const modalText = ref('')
+
+function closeModal() {
+  isDialogOpen.value = false
+}
+
+function openModal() {
+  isDialogOpen.value = true
+}
 
 const name = ref('')
 const email = ref('')
@@ -31,15 +50,101 @@ async function createContact() {
       })
 
       const response = await request.json()
+
+      const contactExists = response.status === 'error' && response.message === 'Contact already exists'
+      
+      if (contactExists) {
+          modalTitle.value = 'Contato ja existe'
+          modalText.value = 'O e-mail que você está tentando cadastrar já está vinculado à um contato.'
+          email.value = ''
+          openModal()
+          return
+      }
+
+      if (response.status === 'error') {
+          modalTitle.value = 'Erro ao salvar contato'
+          modalText.value = 'Ocorreu um erro ao salvar o contato. Tente novamente mais tarde.'
+          openModal()
+          return
+      }
+
+      if (response.status === 'success') {
+          modalTitle.value = 'Contato salvo com sucesso'
+          modalText.value = `O contato ${name.value} com o e-mail ${email.value} foi salvo com sucesso.`
+          openModal()
+          name.value = ''
+          email.value = ''
+          address.value = ''
+          phoneNumbers.phone1 = ''
+          phoneNumbers.phone2 = ''
+          phoneNumbers.phone3 = ''
+          phoneNumbers.phone4 = ''
+          return
+      }
+
       console.log(response)
   } catch (error) {
       console.log(error)
+      modalTitle.value = 'Erro fatal'
+      modalText.value = 'Ocorreu um erro inesperado. Tente novamente mais tarde.'
+      openModal()
   }
 }
 </script>
 
 <template>
-    <div class="isolate bg-white px-6 py-24 sm:py-32 lg:px-8 h-[calc(100vh-80px)]">
+  <TransitionRoot appear :show="isDialogOpen" as="template">
+    <Dialog as="div" :open="isDialogOpen" @close="closeModal" class="relative z-50">
+      <TransitionChild
+        as="template"
+        enter="duration-300 ease-out"
+        enter-from="opacity-0"
+        enter-to="opacity-100"
+        leave="duration-200 ease-in"
+        leave-from="opacity-100"
+        leave-to="opacity-0"
+      >
+        <div class="fixed inset-0 bg-black/25" />
+      </TransitionChild>
+      <div class="fixed inset-0 overflow-y-auto">
+        <div class="flex min-h-full items-center justify-center p-4 text-center">
+          <TransitionChild
+            as="template"
+            enter="duration-300 ease-out"
+            enter-from="opacity-0 scale-95"
+            enter-to="opacity-100 scale-100"
+            leave="duration-200 ease-in"
+            leave-from="opacity-100 scale-100"
+            leave-to="opacity-0 scale-95"
+          >
+            <DialogPanel class="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+              <DialogTitle
+                as="h3"
+                class="text-lg font-medium leading-6 text-gray-900"
+              >
+                {{ modalTitle }}
+              </DialogTitle>
+              <div class="mt-2">
+                <p class="text-sm text-gray-500">
+                  {{ modalText }}
+                </p>
+              </div>
+              <div class="mt-4">
+                <button
+                  type="button"
+                  class="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                  @click="closeModal"
+                >
+                  Entendi
+                </button>
+              </div>
+            </DialogPanel>
+          </TransitionChild>
+        </div>
+      </div>
+    </Dialog>
+  </TransitionRoot>
+  <div class="isolate bg-white px-6 py-24 sm:py-20 lg:px-8 h-[calc(100vh-80px)]">
       <div class="mx-auto max-w-2xl text-center">
         <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Criar novo contato</h2>
       </div>
