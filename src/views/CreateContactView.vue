@@ -1,6 +1,7 @@
 <script setup>
 import { reactive, ref } from 'vue'
 import { TransitionRoot, TransitionChild, Dialog, DialogPanel, DialogTitle } from '@headlessui/vue'
+import router from '@/router'
 
 const isDialogOpen = ref(false)
 const modalTitle = ref('')
@@ -8,9 +9,12 @@ const modalText = ref('')
 
 function closeModal() {
   isDialogOpen.value = false
+  router.push({ name: 'dashboard' })
 }
 
-function openModal() {
+function openModal(title, text) {
+  modalTitle.value = title
+  modalText.value = text
   isDialogOpen.value = true
 }
 
@@ -49,24 +53,27 @@ async function createContact() {
       response.status === 'error' && response.message === 'Contact already exists'
 
     if (contactExists) {
-      modalTitle.value = 'Contato ja existe'
-      modalText.value = 'O e-mail que você está tentando cadastrar já está vinculado à um contato.'
       email.value = ''
-      openModal()
+      openModal(
+        'Contato já existe',
+        'O e-mail que você está tentando cadastrar já está vinculado à um contato.'
+      )
       return
     }
 
     if (response.status === 'error') {
-      modalTitle.value = 'Erro ao salvar contato'
-      modalText.value = 'Ocorreu um erro ao salvar o contato. Tente novamente mais tarde.'
-      openModal()
+      openModal(
+        'Erro ao salvar contato',
+        'Ocorreu um erro ao salvar o contato. Tente novamente mais tarde.'
+      )
       return
     }
 
     if (response.status === 'success') {
-      modalTitle.value = 'Contato salvo com sucesso'
-      modalText.value = `O contato ${name.value} com o e-mail ${email.value} foi salvo com sucesso.`
-      openModal()
+      openModal(
+        'Contato salvo com sucesso',
+        `O contato ${name.value} com o e-mail ${email.value} foi salvo com sucesso.`
+      )
       name.value = ''
       email.value = ''
       address.value = ''
@@ -76,13 +83,8 @@ async function createContact() {
       phoneNumbers.phone4 = ''
       return
     }
-
-    console.log(response)
   } catch (error) {
-    console.log(error)
-    modalTitle.value = 'Erro fatal'
-    modalText.value = 'Ocorreu um erro inesperado. Tente novamente mais tarde.'
-    openModal()
+    openModal('Erro fatal', 'Ocorreu um erro inesperado. Tente novamente mais tarde.')
   }
 }
 </script>

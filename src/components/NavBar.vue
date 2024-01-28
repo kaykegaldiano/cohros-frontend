@@ -2,10 +2,10 @@
   <header class="bg-white">
     <nav class="flex items-center justify-between p-6 lg:px-8 w-full" aria-label="Global">
       <div class="flex lg:flex-1">
-        <a href="#" class="-m-1.5 p-1.5">
+        <RouterLink class="-m-1.5 p-1.5" to="/">
           <span class="sr-only">Contact Book</span>
           <BookOpenIcon class="h-8 w-auto text-black" aria-hidden="true" />
-        </a>
+        </RouterLink>
       </div>
       <div class="flex lg:hidden">
         <button

@@ -10,9 +10,12 @@ const modalText = ref('')
 
 function closeModal() {
   isDialogOpen.value = false
+  router.push({ name: 'dashboard' })
 }
 
-function openModal() {
+function openModal(title, text) {
+  modalTitle.value = title
+  modalText.value = text
   isDialogOpen.value = true
 }
 
@@ -39,8 +42,6 @@ async function getContact() {
       return
     }
 
-    console.log(response)
-
     name.value = response.name
     email.value = response.email
     address.value = response.address
@@ -49,7 +50,10 @@ async function getContact() {
     phoneNumbers.phone3 = response.phones[2]?.number
     phoneNumbers.phone4 = response.phones[3]?.number
   } catch (error) {
-    console.log(error)
+    openModal(
+      'Erro ao buscar contato',
+      'Ocorreu um erro ao buscar o contato. Tente novamente mais tarde.'
+    )
   }
 }
 
@@ -74,28 +78,23 @@ async function editContact() {
 
     const response = await request.json()
 
-    console.log(response)
-
     if (response.status === 'error') {
-      modalTitle.value = 'Erro ao atualizar contato'
-      modalText.value = 'Ocorreu um erro ao atualizar o contato. Tente novamente mais tarde.'
-      openModal()
+      openModal(
+        'Erro ao atualizar contato',
+        'Ocorreu um erro ao atualizar o contato. Tente novamente mais tarde.'
+      )
       return
     }
 
     if (response.status === 'success') {
-      modalTitle.value = 'Contato atualizado com sucesso'
-      modalText.value = `O contato ${name.value} com o e-mail ${email.value} foi salvo com sucesso.`
-      openModal()
+      openModal(
+        'Contato atualizado com sucesso',
+        `O contato ${name.value} com o e-mail ${email.value} foi salvo com sucesso.`
+      )
       return
     }
-
-    //   console.log(response)
   } catch (error) {
-    console.log(error)
-    modalTitle.value = 'Erro fatal'
-    modalText.value = 'Ocorreu um erro inesperado. Tente novamente mais tarde.'
-    openModal()
+    openModal('Erro fatal', 'Ocorreu um erro inesperado. Tente novamente mais tarde.')
   }
 }
 
