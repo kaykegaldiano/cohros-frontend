@@ -6,23 +6,23 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: () => import('../views/DashboardView.vue'),
+      component: () => import('../views/DashboardView.vue')
     },
     {
       path: '/dashboard',
       name: 'dashboard',
-      component: () => import('../views/DashboardView.vue'),
+      component: () => import('../views/DashboardView.vue')
     },
     {
       path: '/create-contact',
       name: 'create-contact',
-      component: () => import('../views/CreateContactView.vue'),
+      component: () => import('../views/CreateContactView.vue')
     },
     {
       path: '/edit-contact/:id',
       name: 'edit-contact',
-      component: () => import('../views/EditContactView.vue'),
-    },
+      component: () => import('../views/EditContactView.vue')
+    }
   ]
 })
 
