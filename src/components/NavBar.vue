@@ -19,7 +19,7 @@
             </template>
         </div>
         <div class="hidden lg:flex lg:flex-1 lg:justify-end">
-          <p class="text-sm font-semibold leading-6 text-gray-900">User</p>
+          <p class="text-sm font-semibold leading-6 text-gray-900">Usuário Teste</p>
         </div>
       </nav>
       <Dialog as="div" class="lg:hidden" @close="mobileMenuOpen = false" :open="mobileMenuOpen">
@@ -41,7 +41,7 @@
                 <a v-for="item in navigation" :key="item.name" :href="item.href" class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">{{ item.name }}</a>
               </div>
               <div class="py-6">
-                <p href="#" class="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">User</p>
+                <p href="#" class="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Usuário Teste</p>
               </div>
             </div>
           </div>
@@ -56,8 +56,8 @@
   import { Bars3Icon, XMarkIcon, BookOpenIcon } from '@heroicons/vue/24/outline'
   
   const navigation = [
-    { name: 'Dashboard', href: 'dashboard' },
-    { name: 'Criar contato', href: 'create-contact' }
+    { name: 'Dashboard', href: '/dashboard' },
+    { name: 'Criar contato', href: '/create-contact' }
   ]
   
   const mobileMenuOpen = ref(false)
