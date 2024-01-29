@@ -72,24 +72,27 @@ async function editContact() {
   formData.append('name', name.value)
   formData.append('email', email.value)
   formData.append('address', address.value)
-  formData.append('phoneNumbers', JSON.stringify([
-    {
-      id: phoneNumbers.id1,
-      number: phoneNumbers.phone1
-    },
-    {
-      id: phoneNumbers.id2,
-      number: phoneNumbers.phone2
-    },
-    {
-      id: phoneNumbers.id3,
-      number: phoneNumbers.phone3
-    },
-    {
-      id: phoneNumbers.id4,
-      number: phoneNumbers.phone4
-    }
-  ]))
+  formData.append(
+    'phoneNumbers',
+    JSON.stringify([
+      {
+        id: phoneNumbers.id1,
+        number: phoneNumbers.phone1
+      },
+      {
+        id: phoneNumbers.id2,
+        number: phoneNumbers.phone2
+      },
+      {
+        id: phoneNumbers.id3,
+        number: phoneNumbers.phone3
+      },
+      {
+        id: phoneNumbers.id4,
+        number: phoneNumbers.phone4
+      }
+    ])
+  )
 
   try {
     const request = await fetch(`http://localhost/save-contact?id=${id}`, {
