@@ -33,7 +33,7 @@ async function getContacts() {
       name: contact.name,
       address: contact.address,
       email: contact.email,
-      phone: contact.phones[0].number
+      phone: contact.phones[0]?.number
     })
   })
 }
@@ -157,7 +157,7 @@ const displayedContacts = computed(() => {
       <div class="mt-8 flow-root">
         <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-            <table class="min-w-full divide-y divide-gray-300">
+            <table v-if="displayedContacts.length > 0" class="min-w-full divide-y divide-gray-300">
               <thead>
                 <tr>
                   <th
@@ -226,11 +226,12 @@ const displayedContacts = computed(() => {
                 </tr>
               </tbody>
             </table>
+            <p v-else class="text-center text-gray-600">Nenhum contato encontrado</p>
           </div>
         </div>
       </div>
     </div>
-    <div class="mt-8">
+    <div v-if="displayedContacts.length > 0" class="mt-8">
       <vue-awesome-paginate
         :total-items="totalItems"
         :items-per-page="perPage"
