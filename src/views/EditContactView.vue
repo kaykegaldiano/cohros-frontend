@@ -3,6 +3,7 @@ import { onMounted, reactive, ref } from 'vue'
 import { TransitionRoot, TransitionChild, Dialog, DialogPanel, DialogTitle } from '@headlessui/vue'
 import { useRoute } from 'vue-router'
 import router from '@/router'
+import { vMaska } from 'maska'
 
 const isDialogOpen = ref(false)
 const modalTitle = ref('')
@@ -27,9 +28,13 @@ const email = ref('')
 const address = ref('')
 const phoneNumbers = reactive({
   phone1: '',
+  id1: '',
   phone2: '',
+  id2: '',
   phone3: '',
-  phone4: ''
+  id3: '',
+  phone4: '',
+  id4: ''
 })
 
 async function getContact() {
@@ -49,6 +54,10 @@ async function getContact() {
     phoneNumbers.phone2 = response.phones[1]?.number
     phoneNumbers.phone3 = response.phones[2]?.number
     phoneNumbers.phone4 = response.phones[3]?.number
+    phoneNumbers.id1 = response.phones[0].id
+    phoneNumbers.id2 = response.phones[1]?.id
+    phoneNumbers.id3 = response.phones[2]?.id
+    phoneNumbers.id4 = response.phones[3]?.id
   } catch (error) {
     openModal(
       'Erro ao buscar contato',
@@ -63,12 +72,24 @@ async function editContact() {
   formData.append('name', name.value)
   formData.append('email', email.value)
   formData.append('address', address.value)
-  formData.append('phoneNumbers', [
-    phoneNumbers.phone1,
-    phoneNumbers.phone2,
-    phoneNumbers.phone3,
-    phoneNumbers.phone4
-  ])
+  formData.append('phoneNumbers', JSON.stringify([
+    {
+      id: phoneNumbers.id1,
+      number: phoneNumbers.phone1
+    },
+    {
+      id: phoneNumbers.id2,
+      number: phoneNumbers.phone2
+    },
+    {
+      id: phoneNumbers.id3,
+      number: phoneNumbers.phone3
+    },
+    {
+      id: phoneNumbers.id4,
+      number: phoneNumbers.phone4
+    }
+  ]))
 
   try {
     const request = await fetch(`http://localhost/save-contact?id=${id}`, {
@@ -207,9 +228,12 @@ onMounted(async () => {
           <div class="relative mt-2.5">
             <input
               type="tel"
+              v-maska
+              data-maska="(##) #####-####"
               v-model="phoneNumbers.phone1"
               id="phone1"
               required
+              pattern="^\(\d{2}\) \d{5}-\d{4}$"
               class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             />
           </div>
@@ -221,8 +245,11 @@ onMounted(async () => {
           <div class="relative mt-2.5">
             <input
               type="tel"
+              v-maska
+              data-maska="(##) #####-####"
               v-model="phoneNumbers.phone2"
               id="phone2"
+              pattern="^\(\d{2}\) \d{5}-\d{4}$"
               class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             />
           </div>
@@ -234,8 +261,11 @@ onMounted(async () => {
           <div class="relative mt-2.5">
             <input
               type="tel"
+              v-maska
+              data-maska="(##) #####-####"
               v-model="phoneNumbers.phone3"
               id="phone3"
+              pattern="^\(\d{2}\) \d{5}-\d{4}$"
               class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             />
           </div>
@@ -247,8 +277,11 @@ onMounted(async () => {
           <div class="relative mt-2.5">
             <input
               type="tel"
+              v-maska
+              data-maska="(##) #####-####"
               v-model="phoneNumbers.phone4"
               id="phone4"
+              pattern="^\(\d{2}\) \d{5}-\d{4}$"
               class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             />
           </div>
