@@ -2,6 +2,7 @@
 import { reactive, ref } from 'vue'
 import { TransitionRoot, TransitionChild, Dialog, DialogPanel, DialogTitle } from '@headlessui/vue'
 import router from '@/router'
+import { vMaska } from 'maska'
 
 const isDialogOpen = ref(false)
 const modalTitle = ref('')
@@ -34,12 +35,20 @@ async function createContact() {
   formData.append('name', name.value)
   formData.append('email', email.value)
   formData.append('address', address.value)
-  formData.append('phoneNumbers', [
-    phoneNumbers.phone1,
-    phoneNumbers.phone2,
-    phoneNumbers.phone3,
-    phoneNumbers.phone4
-  ])
+  formData.append('phoneNumbers', JSON.stringify([
+    {
+      number: phoneNumbers.phone1
+    },
+    {
+      number: phoneNumbers.phone2
+    },
+    {
+      number: phoneNumbers.phone3
+    },
+    {
+      number: phoneNumbers.phone4
+    }
+  ]))
 
   try {
     const request = await fetch('http://localhost/save-contact', {
@@ -195,8 +204,11 @@ async function createContact() {
           <div class="relative mt-2.5">
             <input
               type="tel"
+              v-maska
+              data-maska="(##) #####-####"
               v-model="phoneNumbers.phone1"
               id="phone1"
+              pattern="^\(\d{2}\) \d{5}-\d{4}$"
               required
               class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             />
@@ -209,8 +221,11 @@ async function createContact() {
           <div class="relative mt-2.5">
             <input
               type="tel"
+              v-maska
+              data-maska="(##) #####-####"
               v-model="phoneNumbers.phone2"
               id="phone2"
+              pattern="^\(\d{2}\) \d{5}-\d{4}$"
               class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             />
           </div>
@@ -222,8 +237,11 @@ async function createContact() {
           <div class="relative mt-2.5">
             <input
               type="tel"
+              v-maska
+              data-maska="(##) #####-####"
               v-model="phoneNumbers.phone3"
               id="phone3"
+              pattern="^\(\d{2}\) \d{5}-\d{4}$"
               class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             />
           </div>
@@ -235,8 +253,11 @@ async function createContact() {
           <div class="relative mt-2.5">
             <input
               type="tel"
+              v-maska
+              data-maska="(##) #####-####"
               v-model="phoneNumbers.phone4"
               id="phone4"
+              pattern="^\(\d{2}\) \d{5}-\d{4}$"
               class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             />
           </div>
