@@ -35,20 +35,23 @@ async function createContact() {
   formData.append('name', name.value)
   formData.append('email', email.value)
   formData.append('address', address.value)
-  formData.append('phoneNumbers', JSON.stringify([
-    {
-      number: phoneNumbers.phone1
-    },
-    {
-      number: phoneNumbers.phone2
-    },
-    {
-      number: phoneNumbers.phone3
-    },
-    {
-      number: phoneNumbers.phone4
-    }
-  ]))
+  formData.append(
+    'phoneNumbers',
+    JSON.stringify([
+      {
+        number: phoneNumbers.phone1
+      },
+      {
+        number: phoneNumbers.phone2
+      },
+      {
+        number: phoneNumbers.phone3
+      },
+      {
+        number: phoneNumbers.phone4
+      }
+    ])
+  )
 
   try {
     const request = await fetch('http://localhost/save-contact', {
